@@ -7,7 +7,7 @@ var Pool = require('./Pool'),
 
 function ConnectionsManager() {
     this.pool = new Pool();
-
+    EventEmitter.call(this);
 };
 
 ConnectionsManager.prototype.add = function (uuid, conn) {

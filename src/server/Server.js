@@ -6,7 +6,9 @@ var extend = require('extend'),
     RequestPool = require('../core/Pool'),
     Connection = require('../core/Connection'),
     ConnectionsManager = require('../core/ConnectionsManager'),
-    PoolEvents = require('../events/PoolEvents');
+    PoolEvents = require('../events/PoolEvents'),
+    Transmitter = require('../transmission/Transmitter'),
+    RequestPoolDriver = require('../transmission/drivers/RequestPoolDriver');
 
 
 function Server(options) {
@@ -43,6 +45,8 @@ function Server(options) {
         console.log("--- WSServerEvents.ON_CONNECTION: "+c.uuid+"---");
         this.connections.add(c.uuid, c);
     });
+
+    this.transmitter = new Transmitter(new RequestPoolDriver(this.requestPool), {});
 
 };
 
