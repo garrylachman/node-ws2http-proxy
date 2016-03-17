@@ -12,9 +12,7 @@ class Transmitter {
         this.in = _in;
         this.out = _out;
 
-        this.in.on(DriverEvents.IN, (data) => {
-            console.log(data);
-        });
+        this.in.on(DriverEvents.IN, (data) => this.out.send(data));
     }
 }
 

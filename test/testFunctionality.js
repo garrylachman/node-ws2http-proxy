@@ -99,6 +99,12 @@ module.exports = {
             test.equal(r.uuid, requestID, 'Validate same request that proxy receive');
         }, 100));
 
+        this.client.requestPool.on(PoolEvents.NEW_REQUEST, (r) => {
+            test.ok(r instanceof Request, "Client request pool receive new request");
+            test.ok(r.uuid.length > 0, 'Request has uuid');
+            test.equal(r.uuid, requestID, 'Validate same request that proxy receive');
+        });
+
         request({
             method: 'GET',
             uri: 'http://httpbin.org/get',
@@ -111,7 +117,7 @@ module.exports = {
             var r = this.server.requestPool.get(requestID);
             test.ok(r instanceof Request, "The request from the pool is instace of Request");
 
-            setTimeout(test.done, 500);
+            setTimeout(test.done, 1000);
         });
 
 

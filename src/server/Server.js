@@ -8,7 +8,8 @@ var extend = require('extend'),
     ConnectionsManager = require('../core/ConnectionsManager'),
     PoolEvents = require('../events/PoolEvents'),
     Transmitter = require('../transmission/Transmitter'),
-    RequestPoolDriver = require('../transmission/drivers/RequestPoolDriver');
+    RequestPoolDriver = require('../transmission/drivers/RequestPoolDriver'),
+    WSDriver = require('../transmission/drivers/WSDriver');
 
 
 function Server(options) {
@@ -46,7 +47,10 @@ function Server(options) {
         this.connections.add(c.uuid, c);
     });
 
-    this.transmitter = new Transmitter(new RequestPoolDriver(this.requestPool), {});
+    this.transmitter = new Transmitter(
+        new RequestPoolDriver(this.requestPool),
+        new WSDriver(this.connections)
+    );
 
 };
 

@@ -15,6 +15,10 @@ class RequestPoolDriver extends Driver {
         });
     }
 
+    send(data) {
+        this.pool.add(data);
+    }
+
 }
 
 module.exports = RequestPoolDriver;
