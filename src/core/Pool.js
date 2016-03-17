@@ -23,7 +23,16 @@ Pool.prototype.remove = function(uuid) {
 
 Pool.prototype.get = function(uuid) {
     return this.list[uuid];
-}
+};
+
+Pool.prototype.getByIndex = function(index) {
+    var key = Object.keys(this.list)[index];
+    return this.list[key];
+};
+
+Pool.prototype.count = function() {
+    return Object.keys(this.list);
+};
 
 util.inherits(Pool, EventEmitter);
 
