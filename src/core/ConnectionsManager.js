@@ -23,6 +23,10 @@ ConnectionsManager.prototype.getRandom = function() {
     return this.pool.getByIndex(randomIndex);
 };
 
+ConnectionsManager.prototype.count = function(uuid) {
+    return this.pool.count();
+};
+
 util.inherits(ConnectionsManager, EventEmitter);
 
 module.exports = ConnectionsManager;

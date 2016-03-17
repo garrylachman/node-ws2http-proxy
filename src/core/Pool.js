@@ -31,7 +31,7 @@ Pool.prototype.getByIndex = function(index) {
 };
 
 Pool.prototype.count = function() {
-    return Object.keys(this.list);
+    return Object.keys(this.list).length;
 };
 
 util.inherits(Pool, EventEmitter);
