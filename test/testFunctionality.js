@@ -4,7 +4,8 @@
 "use strict"
 var Server = require('../src/server/Server'),
     Client = require('../src/client/Client'),
-    Connection = require('../src/core/Connection');
+    Connection = require('../src/core/Connection'),
+    WebSocket = require('ws');
 
 module.exports = {
     setUp: function (callback) {
@@ -52,16 +53,29 @@ module.exports = {
     },
     testServer: function(test) {
         test.equal(this.server.connections.count(), 1, 'Must be 1 connection');
-
-        // try 5 times get random connection
-        for(let i=0; i<5; i++) {
-            console.log(this.server.connections.getRandom() instanceof Connection, 'Random connection #'+i);
-        }
-
         test.done();
     },
     testClient: function (test) {
         test.ok(this.client.isConnected(), 'Check if client connected');
+        test.done();
+    },
+    testConnection: function (test) {
+        // try 5 times get random connection
+        for(let i=0; i<5; i++) {
+            let rc = this.server.connections.getRandom();
+            test.ok(rc instanceof Connection, 'Random connection #'+i);
+            test.ok(rc.uuid.length > 0, 'Connection has uuid #'+i);
+            test.ok(rc.conn instanceof WebSocket, 'Connection has WebSocket #'+i);
+            test.equal(rc.conn.readyState, WebSocket.OPEN, 'Connection ws readyState is WebSocket.OPEN #'+i);
+        }
+
+        var randomConnection = this.server.connections.getRandom();
+        test.strictEqual(randomConnection, this.server.connections.get(randomConnection.uuid), 'Get connection by uuid')
+        this.server.connections.remove(randomConnection.uuid);
+        test.equal(this.server.connections.count(), 0, 'ConnectionManager remove check - must have 0 connections');
+        this.server.connections.add(randomConnection.uuid, randomConnection);
+        test.equal(this.server.connections.count(), 1, 'ConnectionManager add check - must have 1 connection');
+
         test.done();
     },
     testRequest: function (test) {

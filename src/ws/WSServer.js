@@ -11,7 +11,6 @@ var extend = require('extend'),
 
 
 function WSServer(options) {
-
     this.options = {
         host: '0.0.0.0',
         port: 8080
@@ -19,8 +18,6 @@ function WSServer(options) {
     extend(this.options, options);
 
     EventEmitter.call(this);
-
-    console.log(this.options)
 };
 
 util.inherits(WSServer, EventEmitter);

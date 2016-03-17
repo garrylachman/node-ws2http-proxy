@@ -18,6 +18,10 @@ ConnectionsManager.prototype.get = function(uuid) {
     return this.pool.get(uuid);
 };
 
+ConnectionsManager.prototype.remove = function(uuid) {
+    this.pool.remove(uuid);
+};
+
 ConnectionsManager.prototype.getRandom = function() {
     var randomIndex = Math.floor(Math.random(0, this.pool.count()));
     return this.pool.getByIndex(randomIndex);

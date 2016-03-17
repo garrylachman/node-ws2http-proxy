@@ -7,7 +7,6 @@ var extend = require('extend'),
 
 
 function ProxyServer(options) {
-
     this.options = {
         host: '0.0.0.0',
         port: 8080
@@ -17,8 +16,6 @@ function ProxyServer(options) {
     EventEmitter.call(this);
 
     this.proxyServer = new HttpProxyServer();
-
-    console.log(this.options)
 };
 
 util.inherits(ProxyServer, EventEmitter);
