@@ -46,6 +46,11 @@ function Server(options) {
 
 };
 
+Server.prototype.stop = function(){
+    this.proxyServer.stop();
+    this.wsServer.stop();
+};
+
 
 
 module.exports = Server;

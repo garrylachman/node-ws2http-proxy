@@ -27,6 +27,10 @@ ProxyServer.prototype.start = function() {
     this.proxyServer.listen(this.options.port, this.options.host);
 };
 
+ProxyServer.prototype.stop = function() {
+    this.proxyServer.close();
+};
+
 ProxyServer.prototype.capture = function () {
     var _this = this;
     this.proxyServer.use(function(c2pRequest, p2cResponse) {

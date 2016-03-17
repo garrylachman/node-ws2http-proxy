@@ -32,11 +32,14 @@ WSServer.prototype.start = function() {
     });
 };
 
+WSServer.prototype.stop = function() {
+    this.wsServer.close();
+};
+
 WSServer.prototype.capture = function () {
     var _this = this;
 
     this.wsServer.on('connection', function connection(wsc) {
-        console.log("conn");
         var c = new Connection(wsc);
         _this.emit(WSServerEvents.ON_CONNECTION, c);
     });
