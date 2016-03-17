@@ -5,7 +5,12 @@
 var Server = require('../src/server/Server'),
     Client = require('../src/client/Client'),
     Connection = require('../src/core/Connection'),
-    WebSocket = require('ws');
+    ProxyServer = require('../src/proxy/ProxyServer'),
+    ProxyServerEvents = require('../src/events/ProxyServerEvents'),
+    Request = require('../src/core/Request'),
+    PoolEvents = require('../src/events/PoolEvents'),
+    WebSocket = require('ws'),
+    request = require('request');
 
 module.exports = {
     setUp: function (callback) {
@@ -78,8 +83,38 @@ module.exports = {
 
         test.done();
     },
-    testRequest: function (test) {
-        test.equal(1,1,"1");
-        test.done();
+    testRequestGET: function (test) {
+        var requestID = undefined;
+
+        this.server.proxyServer.on(ProxyServerEvents.ON_REQUEST, (r) => {
+            test.ok(r instanceof Request, "Proxy server receive new request");
+            test.ok(r.uuid.length > 0, 'Request has uuid');
+            requestID = r.uuid;
+        });
+
+        // delay in 100ms to ensure we got already request id
+        this.server.requestPool.on(PoolEvents.NEW_REQUEST, (r) => setTimeout(() => {
+            test.ok(r instanceof Request, "Request pool receive new request");
+            test.ok(r.uuid.length > 0, 'Request has uuid');
+            test.equal(r.uuid, requestID, 'Validate same request that proxy receive');
+        }, 100));
+
+        request({
+            method: 'GET',
+            uri: 'http://httpbin.org/get',
+            proxy: 'http://127.0.0.1:8002',
+            timeout: 3000,
+        },  (error, response, body) => {
+
+            //test.ifError(error);
+            test.equal(this.server.requestPool.count(), 1, "Request pool has 1 request");
+            var r = this.server.requestPool.get(requestID);
+            test.ok(r instanceof Request, "The request from the pool is instace of Request");
+
+            setTimeout(test.done, 500);
+        });
+
+
+
     }
 };

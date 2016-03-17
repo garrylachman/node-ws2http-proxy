@@ -21,7 +21,7 @@ function Server(options) {
     this.requestPool = new RequestPool();
     this.requestPool.on(PoolEvents.NEW_REQUEST, (r) => {
         console.log("--- PoolEvents.NEW_REQUEST: "+r.uuid+"---");
-    })
+    });
 
     // CONNECTIONS
     this.connections = new ConnectionsManager();
