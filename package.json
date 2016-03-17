@@ -4,8 +4,15 @@
   "description": "HTTP Proxy via HTTP WebSocket. client & server",
   "repository": "https://github.com/garrylachman/node-ws2http-proxy",
   "license": "GPL",
+  "bin": {
+    "ws2http-server": "bin/server.js"
+  },
   "dependencies": {
+    "commander": "^2.9.0",
+    "extend": "^3.0.0",
     "http-proxy-server": "0.0.6",
+    "minimist": "^1.2.0",
+    "node-uuid": "^1.4.7",
     "ws": "^1.0.1"
   }
 }
