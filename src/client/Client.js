@@ -33,15 +33,15 @@ function Client(options) {
         // flags.binary will be set if a binary data is received.
         // flags.masked will be set if the data was masked.
     });
-
-
 };
 
 Client.prototype.stop = function(){
     this.wss.close();
 };
 
-
+Client.prototype.isConnected = function() {
+    return this.wss.readyState == WebSocket.OPEN;
+};
 
 module.exports = Client;
 

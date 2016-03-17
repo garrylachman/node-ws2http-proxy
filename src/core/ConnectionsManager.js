@@ -19,7 +19,7 @@ ConnectionsManager.prototype.get = function(uuid) {
 };
 
 ConnectionsManager.prototype.getRandom = function() {
-    var randomIndex = Math.random(0, this.pool.count());
+    var randomIndex = Math.floor(Math.random(0, this.pool.count()));
     return this.pool.getByIndex(randomIndex);
 };
 
