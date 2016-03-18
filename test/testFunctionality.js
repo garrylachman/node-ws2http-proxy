@@ -117,7 +117,7 @@ module.exports = {
             var r = this.server.requestPool.get(requestID);
             test.ok(r instanceof Request, "The request from the pool is instace of Request");
 
-            setTimeout(test.done, 1000);
+            setTimeout(test.done, 5000);
         });
 
 

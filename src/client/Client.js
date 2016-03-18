@@ -5,7 +5,8 @@ var extend = require('extend'),
     WebSocket = require('ws'),
     RequestPool = require('../core/Pool'),
     PoolEvents = require('../events/PoolEvents'),
-    RequestItem = require('../core/Request');
+    RequestItem = require('../core/Request'),
+    Executer = require('../execute/Executer');
 
 
 function Client(options) {
@@ -18,10 +19,21 @@ function Client(options) {
     };
     extend(this.options, options);
 
+    this.executer = new Executer();
+
     // POOL
     this.requestPool = new RequestPool();
     this.requestPool.on(PoolEvents.NEW_REQUEST, (r) => {
         console.log("--- client :: PoolEvents.NEW_REQUEST: "+r.uuid+"---");
+        this.executer.execute(r)
+            .then(
+                (res) => {
+                    console.log(res.toJSON());
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
     });
 
     this.wss = new WebSocket('ws://'+this.options.wss.host + ':' + this.options.wss.port);
@@ -35,9 +47,6 @@ function Client(options) {
         // flags.masked will be set if the data was masked.
         var req = RequestItem.fromJSON(data);
         this.requestPool.add(req.uuid, req);
-        console.log("Client.message");
-        console.log(flags.binary);
-        console.log(data);
     });
 };
 
